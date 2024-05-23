@@ -1,0 +1,15 @@
+{
+	"name": "projet-fin-de-formation",
+	"version": "1.0.0",
+	"description": "## Avec un profil et possibilités d’être lié à une famille afin de partager ses listes.",
+	"main": "index.js",
+	"scripts": {
+		"install": "cd client && pnpm install && cd ../server && pnpm install",
+		"start": "pnpm run server",
+		"server": "cd server && nodemon app.ts",
+		"client": "cd client && pnpm dev"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {}
+}

@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model family {
+  familyId     Int            @id @default(autoincrement())
+  familyName   String         @db.VarChar
+  history      history[]
+  shoppingList shoppingList[]
+  users        users[]
+}
+
+model history {
+  historyId Int    @id @default(autoincrement())
+  familyId  Int
+  family    family @relation(fields: [familyId], references: [familyId], onDelete: NoAction, onUpdate: NoAction, map: "familyId")
+}
+
+model items {
+  itemId         Int          @id @default(autoincrement())
+  name           String       @db.VarChar
+  imageUrl       String[]     @db.Char
+  quantity       Int
+  shoppingListId Int
+  shoppingList   shoppingList @relation(fields: [shoppingListId], references: [shoppingListId], onDelete: NoAction, onUpdate: NoAction, map: "shoppingListId")
+}
+
+model shoppingList {
+  shoppingListId Int      @id @default(autoincrement())
+  date           DateTime @db.Date
+  familyId       Int
+  name           String   @db.VarChar
+  items          items[]
+  family         family   @relation(fields: [familyId], references: [familyId], onDelete: NoAction, onUpdate: NoAction, map: "familyId")
+}
+
+model users {
+  userId    Int     @id @default(autoincrement())
+  username  String  @db.VarChar
+  firstname String  @db.VarChar
+  lastname  String  @db.VarChar
+  password  String  @db.VarChar
+  familyId  Int?
+  family    family? @relation(fields: [familyId], references: [familyId], onDelete: NoAction, onUpdate: NoAction, map: "familyId")
+}

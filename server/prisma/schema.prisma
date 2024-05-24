@@ -41,7 +41,7 @@ model shoppingList {
 
 model users {
   userId    Int     @id @default(autoincrement())
-  username  String  @db.VarChar
+  username  String  @unique(map: "uniqueUsername") @db.VarChar
   firstname String  @db.VarChar
   lastname  String  @db.VarChar
   password  String  @db.VarChar

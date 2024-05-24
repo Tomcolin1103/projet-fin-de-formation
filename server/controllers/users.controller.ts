@@ -7,17 +7,20 @@ import usersService from "../services/users.service";
 const usersController = {
 	createUser: async (req: Request, res: Response) => {
 		const { username, firstname, lastname, password } = req.body;
-		const hashedPassword = bcrypt.hashSync(password, 10);
 
 		try {
 			const result = await usersService.createUser({
 				username,
 				firstname,
 				lastname,
-				hashedPassword,
+				password,
 			});
 			if (result) {
-				res.send({ result });
+				const user = await usersService.login(username, password);
+				if (user) {
+					console.log(user);
+					res.send({ message: "Registered and logged" });
+				}
 			} else {
 				res.send({ message: "Error" });
 			}
@@ -28,9 +31,12 @@ const usersController = {
 	},
 	login: async (req: Request, res: Response) => {
 		try {
-			const { username } = req.body;
-			const user = await usersService.login(username);
-			console.log(user);
+			const { username, password } = req.body;
+			const user = await usersService.login(username, password);
+			if (user) {
+				console.log(user);
+				res.send({ message: "Logged" });
+			}
 		} catch (e) {
 			console.error(e);
 			res.sendStatus(500);
@@ -47,7 +53,8 @@ const usersController = {
 	},
 	getUserById: async (req: Request, res: Response) => {
 		try {
-			const user = await usersService.getUserById(req.params.id);
+			const userId: number = +req.params.id;
+			const user = await usersService.getUserById(userId);
 			res.send({ user });
 		} catch (e) {
 			console.error(e);
@@ -58,8 +65,9 @@ const usersController = {
 		try {
 			const { username, firstname, lastname, password, familyId } = req.body;
 			const hashedPassword = bcrypt.hashSync(password, 10);
+			const userId: number = +req.params.id;
 
-			const updatedUser = await usersService.updateUser(req.params.id, {
+			const updatedUser = await usersService.updateUser(userId, {
 				username,
 				firstname,
 				lastname,
@@ -74,7 +82,8 @@ const usersController = {
 	},
 	deleteUser: async (req: Request, res: Response) => {
 		try {
-			const deletedUser = await usersService.deleteUser(req.params.id);
+			const userId: number = +req.params.id;
+			const deletedUser = await usersService.deleteUser(userId);
 			res.send({ deletedUser });
 		} catch (e) {
 			console.error(e);

@@ -6,6 +6,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import Login from "./components/Login.jsx";
 import { RecoilRoot } from "recoil";
 import Register from "./components/Register.jsx";
+import Profile from "./components/Profile.jsx";
 
 const router = createBrowserRouter([
 	{
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
 			{
 				path: "/home",
 				element: <div>Home</div>,
+			},
+			{
+				path: "/profile",
+				element: <Profile />,
 			},
 		],
 	},

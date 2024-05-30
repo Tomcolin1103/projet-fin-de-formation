@@ -10,12 +10,29 @@ import {
 import { useState } from "react";
 import { Link } from "react-router-dom";
 
+import { useRecoilState } from "recoil";
+import { isLoggedState, userState } from "../atoms/atom";
+import { user } from "../api/user.api";
+
 export default function Navbar() {
 	const navigationItem = ["Home", "Login", "Register"];
 	const [open, setOpen] = useState(false);
+	const [isLogged, setIsLogged] = useRecoilState(isLoggedState);
+	const [, setUserLogged] = useRecoilState(userState);
 
 	const toggleDrawer = (newOpen) => () => {
 		setOpen(newOpen);
+	};
+
+	const onClickLogout = () => {
+		user.logout();
+		setIsLogged(false);
+		setUserLogged({
+			username: "",
+			firstname: "",
+			lastname: "",
+			password: "",
+		});
 	};
 
 	const DrawerList = (
@@ -30,6 +47,22 @@ export default function Navbar() {
 						</ListItem>
 					</Link>
 				))}
+				{isLogged ? (
+					<Link to={"/profile"}>
+						<ListItem disablePadding>
+							<ListItemButton>
+								<ListItemText primary={"Profile"}></ListItemText>
+							</ListItemButton>
+						</ListItem>
+					</Link>
+				) : null}
+				<ListItem disablePadding>
+					<ListItemButton>
+						<Button variant="outlined" color="error" onClick={onClickLogout}>
+							Logout
+						</Button>
+					</ListItemButton>
+				</ListItem>
 			</List>
 		</Box>
 	);

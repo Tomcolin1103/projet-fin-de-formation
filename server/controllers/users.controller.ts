@@ -34,8 +34,8 @@ const usersController = {
 			const { username, password } = req.body;
 			const user = await usersService.login(username, password);
 			if (user) {
-				console.log(user);
-				res.send({ message: "Logged" });
+				res.setHeader("Authorization", `Bearer ${user.token}`);
+				res.send({ message: "Logged", token: user.token, user: user });
 			}
 		} catch (e) {
 			console.error(e);

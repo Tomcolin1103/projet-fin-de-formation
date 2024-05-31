@@ -70,6 +70,15 @@ export default function Navbar() {
 								</ListItem>
 							</Link>
 						) : null}
+						{isLogged ? (
+							<Link to={"/family"}>
+								<ListItem disablePadding>
+									<ListItemButton>
+										<ListItemText primary={"Family"}></ListItemText>
+									</ListItemButton>
+								</ListItem>
+							</Link>
+						) : null}
 						<ListItem disablePadding>
 							<ListItemButton>
 								<Button

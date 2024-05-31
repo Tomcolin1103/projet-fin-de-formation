@@ -4,5 +4,10 @@ export interface IUser {
 	firstname: string;
 	lastname: string;
 	password: string;
-	familyId: number | null;
+	familyId: number[] | null;
+}
+
+export interface IFamily {
+	familyId: number;
+	familyName: string;
 }

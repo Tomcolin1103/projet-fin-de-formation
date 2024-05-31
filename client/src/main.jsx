@@ -7,6 +7,8 @@ import Login from "./components/Login.jsx";
 import { RecoilRoot } from "recoil";
 import Register from "./components/Register.jsx";
 import Profile from "./components/Profile.jsx";
+import Family from "./components/Family.jsx";
+import NewFamilyForm from "./components/NewFamilyForm.jsx";
 
 const router = createBrowserRouter([
 	{
@@ -28,6 +30,16 @@ const router = createBrowserRouter([
 			{
 				path: "/profile",
 				element: <Profile />,
+			},
+			{
+				path: "/family",
+				element: <Family />,
+				children: [
+					{
+						path: "/family/newFamily",
+						element: <NewFamilyForm />,
+					},
+				],
 			},
 		],
 	},

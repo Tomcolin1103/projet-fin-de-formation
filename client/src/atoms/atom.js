@@ -24,7 +24,7 @@ const userState = atom({
 
 const isLoggedState = atom({
 	key: "isLoggedState",
-	default: true,
+	default: false,
 });
 
 export { newUserState, userState, isLoggedState };

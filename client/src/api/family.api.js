@@ -8,11 +8,19 @@ export const family = {
 				familyName: familyName,
 			})
 			.then((res) => {
-				console.log(familyName);
 				console.log(res);
 			})
 			.catch((e) => {
-				console.log(familyName);
+				console.error(e);
+			});
+	},
+	getUserFamily: (userId) => {
+		return axios
+			.get(`http://localhost:3000/api/family/userFamily/${userId}`)
+			.then((res) => {
+				return res.data.userFamily;
+			})
+			.catch((e) => {
 				console.error(e);
 			});
 	},

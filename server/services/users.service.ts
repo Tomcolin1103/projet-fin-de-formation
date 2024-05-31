@@ -84,7 +84,7 @@ const usersService = {
 			firstname?: string;
 			lastname?: string;
 			hashedPassword?: string;
-			familyId?: number;
+			familyId?: [number];
 		}
 	) => {
 		const id: number = +userId;

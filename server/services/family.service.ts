@@ -26,21 +26,21 @@ const familyService = {
 			throw e;
 		}
 	},
-	getFamilyByUserId: async (userId: number) => {
+	getUserFamilyByUserId: async (userId: number) => {
 		const id: number = +userId;
 		try {
 			const user = await prisma.users.findUnique({
 				where: { userId: id },
 			});
 			if (user) {
-				console.log(user.familyId);
-				// const familys = await prisma.family.findMany({
-				// 	where: {
-				// 		familyId: {
-				// 			in: user.familyId,
-				// 		},
-				// 	},
-				// });
+				const familys = await prisma.family.findMany({
+					where: {
+						familyId: {
+							in: user.familyId,
+						},
+					},
+				});
+				return familys;
 			}
 		} catch (e) {
 			console.error(e);
@@ -60,6 +60,30 @@ const familyService = {
 				},
 			});
 			return updateFamily;
+		} catch (e) {
+			console.error(e);
+			throw e;
+		}
+	},
+	leaveFamily: async (data: {
+		listFamilys: number[];
+		userId: number;
+		familyToLeave: number;
+	}) => {
+		try {
+			const { listFamilys, userId, familyToLeave } = data;
+			const newFamilyList = listFamilys.filter(
+				(familyId: number) => familyId !== familyToLeave
+			);
+			const usId: number = +userId;
+			const user = await prisma.users.update({
+				where: {
+					userId: usId,
+				},
+				data: {
+					familyId: newFamilyList,
+				},
+			});
 		} catch (e) {
 			console.error(e);
 			throw e;

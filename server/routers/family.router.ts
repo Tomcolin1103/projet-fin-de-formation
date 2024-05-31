@@ -3,6 +3,7 @@ import familyController from "../controllers/family.controller";
 
 // TODO Ajouter le middleware Auth pour devoir être connecter pour acceder aux routes
 router.route("/").get(familyController.getAllFamily);
+router.route("/userFamily/:id").get(familyController.getUserFamilyByUserId);
 router
 	.route("/:id")
 	.delete(familyController.deleteFamily)

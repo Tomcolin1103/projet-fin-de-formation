@@ -1,4 +1,4 @@
-import { Button, Input } from "@mui/material";
+import { Button, Input, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { user } from "../api/user.api";
 import { isLoggedState, userState } from "../atoms/atom";
@@ -25,7 +25,7 @@ export default function Login() {
 		if (password === "") {
 			setPasswordError(true);
 		}
-		if (username && password) {
+		if (username !== "" && passwordError !== "") {
 			setLogin(true);
 		}
 	};
@@ -39,7 +39,7 @@ export default function Login() {
 
 	return (
 		<form autoComplete="off" onSubmit={handleSubmit}>
-			<h2>Login Form</h2>
+			<Typography variant="h2">Login Form</Typography>
 			<Input
 				label="Username"
 				onChange={(e) => setUsername(e.target.value)}

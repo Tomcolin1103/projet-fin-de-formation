@@ -50,6 +50,7 @@ export default function Register() {
 						value={username}
 						onChange={(e) => setUsername(e.target.value)}
 						placeholder="username"
+						sx={{ m: 3 }}
 					/>
 				</FormControl>
 				<FormControl>
@@ -60,6 +61,7 @@ export default function Register() {
 						value={firstname}
 						onChange={(e) => setFirstname(e.target.value)}
 						placeholder="Firstname"
+						sx={{ m: 3 }}
 					/>
 				</FormControl>
 				<FormControl>
@@ -69,6 +71,7 @@ export default function Register() {
 						value={lastname}
 						onChange={(e) => setLastname(e.target.value)}
 						placeholder="Lastname"
+						sx={{ m: 3 }}
 					/>
 				</FormControl>
 				<FormControl>
@@ -79,10 +82,11 @@ export default function Register() {
 						value={password}
 						onChange={(e) => setPassword(e.target.value)}
 						placeholder="Password"
+						sx={{ m: 3 }}
 					/>
 				</FormControl>
 				<FormControl>
-					<Button variant="outlined" type="submit">
+					<Button variant="outlined" type="submit" sx={{ m: 3 }}>
 						Register
 					</Button>
 				</FormControl>

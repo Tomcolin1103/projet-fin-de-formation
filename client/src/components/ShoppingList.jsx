@@ -45,7 +45,7 @@ export default function ShoppingList() {
 	const handleDelete = async (itemId) => {
 		try {
 			if (itemId) {
-				const deletedItem = await itemsApiCall.deleteItem(itemId);
+				await itemsApiCall.deleteItem(itemId);
 				window.location.reload();
 			}
 		} catch (error) {

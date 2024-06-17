@@ -8,7 +8,7 @@ export default function NewItem() {
 	const [quantity, setQuantity] = useState(0);
 	const { listId } = useParams();
 
-	const handleSubmit = (e) => {
+	const handleSubmit = () => {
 		itemsApiCall.createItem(name, quantity, listId);
 		setName("");
 		setQuantity(0);

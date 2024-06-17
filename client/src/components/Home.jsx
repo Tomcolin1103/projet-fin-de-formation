@@ -1,4 +1,4 @@
-import { Typography, Container, Box, Button, Grid, Paper } from "@mui/material";
+import { Typography, Container, Box, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 
 export default function Home() {
@@ -20,7 +20,7 @@ export default function Home() {
 					This is an application for creating shared shopping lists.
 				</Typography>
 				<Typography variant="h6" paragraph>
-					To do this, simply register and then go to the "Family" tab, where you
+					To do this, simply register and then go to the Family tab, where you
 					can join or create a family.
 				</Typography>
 				<Link to={"/register"}>

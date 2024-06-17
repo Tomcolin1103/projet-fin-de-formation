@@ -20,15 +20,6 @@ model history {
   family    family @relation(fields: [familyId], references: [familyId], onDelete: NoAction, onUpdate: NoAction, map: "familyId")
 }
 
-model items {
-  itemId         Int          @id @default(autoincrement())
-  name           String       @db.VarChar
-  imageUrl       String[]     @db.Char
-  quantity       Int
-  shoppingListId Int
-  shoppingList   shoppingList @relation(fields: [shoppingListId], references: [shoppingListId], onDelete: NoAction, onUpdate: NoAction, map: "shoppingListId")
-}
-
 model shoppingList {
   shoppingListId Int      @id @default(autoincrement())
   date           DateTime @db.Date
@@ -45,4 +36,13 @@ model users {
   lastname  String @db.VarChar
   password  String @db.VarChar
   familyId  Int[]
+}
+
+model items {
+  itemId         Int          @id @default(autoincrement())
+  name           String       @db.VarChar
+  imageUrl       String[]     @db.Char(1)
+  quantity       Int
+  shoppingListId Int
+  shoppingList   shoppingList @relation(fields: [shoppingListId], references: [shoppingListId], onDelete: NoAction, onUpdate: NoAction, map: "shoppingListId")
 }

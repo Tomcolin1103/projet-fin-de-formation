@@ -63,16 +63,11 @@ const usersController = {
 	},
 	updateUser: async (req: Request, res: Response) => {
 		try {
-			const { username, firstname, lastname, password, familyId } = req.body;
-			const hashedPassword = bcrypt.hashSync(password, 10);
+			const { username } = req.body;
 			const userId: number = +req.params.id;
 
 			const updatedUser = await usersService.updateUser(userId, {
 				username,
-				firstname,
-				lastname,
-				hashedPassword,
-				familyId,
 			});
 			res.send({ updatedUser });
 		} catch (e) {
@@ -87,6 +82,28 @@ const usersController = {
 			res.send({ deletedUser });
 		} catch (e) {
 			console.error(e);
+			res.sendStatus(500);
+		}
+	},
+	leaveFamily: async (req: Request, res: Response) => {
+		try {
+			const userId: number = +req.params.id;
+			const familyToLeave: number = +req.body.familyToLeave;
+			const user = await usersService.leaveFamily(userId, familyToLeave);
+			res.send({ user });
+		} catch (e) {
+			console.error(e);
+			res.sendStatus(500);
+		}
+	},
+	joinFamily: async (req: Request, res: Response) => {
+		try {
+			const userId: number = +req.params.id;
+			const familyToJoin: number = +req.body.familyToJoin;
+			const user = await usersService.joinFamily(userId, familyToJoin);
+			res.send({ user });
+		} catch (error) {
+			console.error(error);
 			res.sendStatus(500);
 		}
 	},

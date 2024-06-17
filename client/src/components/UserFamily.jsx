@@ -1,12 +1,22 @@
-import { Box, Button, Card, Stack, Typography } from "@mui/material";
+import {
+	Box,
+	Button,
+	Card,
+	CircularProgress,
+	Stack,
+	Typography,
+} from "@mui/material";
 import { Outlet } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { family } from "../api/family.api";
 import { useEffect, useState } from "react";
+import { user } from "../api/user.api";
+import { redirect } from "react-router-dom";
 
-export default function Family() {
+export default function UserFamily() {
 	const [userFamily, setUserFamily] = useState([]);
 	const [loading, setLoading] = useState(true);
+	const [isDelete, setIsDelete] = useState(false);
 
 	const userId = localStorage.getItem("user");
 	const getUserFamily = async () => {
@@ -24,12 +34,16 @@ export default function Family() {
 		}
 	};
 
+	if (isDelete) {
+		redirect("/");
+	}
+
 	useEffect(() => {
 		getUserFamily();
-	}, [userId]);
+	}, [userId, isDelete]);
 
 	if (loading) {
-		return <Typography>Loading ...</Typography>;
+		return <CircularProgress />;
 	}
 
 	function Divider() {
@@ -43,12 +57,19 @@ export default function Family() {
 								justifyContent="space-between"
 								alignItems="center"
 							>
-								<Typography variant="h5">{userFam.familyName}</Typography>
+								<Link to={`${userFam.familyId}`}>
+									<Typography variant="h5" className="hover:text-cyan-700">
+										{userFam.familyName}
+									</Typography>
+								</Link>
 								<Button
 									variant="contained"
 									color="error"
 									id={index}
-									onClick={() => console.log(userFam.familyId)}
+									onClick={() =>
+										user.leaveFamily(userId, userFam.familyId) &&
+										setIsDelete(true)
+									}
 								>
 									X
 								</Button>
@@ -64,9 +85,11 @@ export default function Family() {
 		<Box alignItems="center">
 			<Typography variant="h3">Family</Typography>
 			<Box alignItems="center" sx={{ m: 1 }}>
-				<Button color="secondary" variant="contained" sx={{ m: 3 }}>
-					Join Family
-				</Button>
+				<Link to={"joinFamily"}>
+					<Button color="secondary" variant="contained" sx={{ m: 3 }}>
+						Join Family
+					</Button>
+				</Link>
 				<Link to={"newFamily"}>
 					<Button color="success" variant="contained" sx={{ m: 3 }}>
 						+ Create Family

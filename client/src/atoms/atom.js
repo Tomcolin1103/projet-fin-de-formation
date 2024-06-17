@@ -27,4 +27,23 @@ const isLoggedState = atom({
 	default: false,
 });
 
-export { newUserState, userState, isLoggedState };
+const familyDetailState = atom({
+	key: "familyDetailState",
+	default: {
+		familyId: null,
+		familyName: "",
+	},
+});
+
+const triggerRerenderShoppingList = atom({
+	key: "triggerRerenderShoppingList",
+	default: 0,
+});
+
+export {
+	newUserState,
+	userState,
+	isLoggedState,
+	familyDetailState,
+	triggerRerenderShoppingList,
+};

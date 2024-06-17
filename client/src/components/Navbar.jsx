@@ -10,16 +10,28 @@ import {
 	Toolbar,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-
+import { useEffect } from "react";
 import { useRecoilState } from "recoil";
 import { isLoggedState, userState } from "../atoms/atom";
 import { user } from "../api/user.api";
 import { Outlet } from "react-router-dom";
 
 export default function Navbar() {
-	const navigationItem = ["Home", "Login", "Register"];
+	let navigationItem = ["Home", "Login", "Register"];
 	const [isLogged, setIsLogged] = useRecoilState(isLoggedState);
 	const [, setUserLogged] = useRecoilState(userState);
+
+	useEffect(() => {
+		if (localStorage.getItem("user")) {
+			setIsLogged(true);
+		}
+	}, [setIsLogged]);
+
+	if (isLogged) {
+		navigationItem = navigationItem.filter(
+			(navItem) => navItem !== "Login" && navItem !== "Register"
+		);
+	}
 
 	const onClickLogout = () => {
 		user.logout();
@@ -34,7 +46,7 @@ export default function Navbar() {
 
 	const drawerWidth = 240;
 
-	function PermamentDrawerLeft() {
+	function PermanentDrawerLeft() {
 		return (
 			<Box sx={{ display: "flex" }}>
 				<Drawer
@@ -53,43 +65,39 @@ export default function Navbar() {
 					<Divider />
 					<List>
 						{navigationItem.map((text, index) => (
-							<Link to={"/" + text.toLowerCase()} key={index}>
-								<ListItem disablePadding>
-									<ListItemButton>
-										<ListItemText primary={text} />
-									</ListItemButton>
-								</ListItem>
-							</Link>
+							<ListItem disablePadding key={index}>
+								<ListItemButton component={Link} to={"/" + text.toLowerCase()}>
+									<ListItemText primary={text} />
+								</ListItemButton>
+							</ListItem>
 						))}
-						{isLogged ? (
-							<Link to={"/profile"}>
+						{isLogged && (
+							<>
 								<ListItem disablePadding>
-									<ListItemButton>
-										<ListItemText primary={"Profile"}></ListItemText>
+									<ListItemButton component={Link} to="/profile">
+										<ListItemText primary="Profile" />
 									</ListItemButton>
 								</ListItem>
-							</Link>
-						) : null}
-						{isLogged ? (
-							<Link to={"/family"}>
 								<ListItem disablePadding>
-									<ListItemButton>
-										<ListItemText primary={"Family"}></ListItemText>
+									<ListItemButton component={Link} to="/family">
+										<ListItemText primary="Family" />
 									</ListItemButton>
 								</ListItem>
-							</Link>
-						) : null}
-						<ListItem disablePadding>
-							<ListItemButton>
-								<Button
-									variant="outlined"
-									color="error"
-									onClick={onClickLogout}
-								>
-									Logout
-								</Button>
-							</ListItemButton>
-						</ListItem>
+							</>
+						)}
+						{isLogged && (
+							<ListItem disablePadding>
+								<ListItemButton>
+									<Button
+										variant="outlined"
+										color="error"
+										onClick={onClickLogout}
+									>
+										Logout
+									</Button>
+								</ListItemButton>
+							</ListItem>
+						)}
 					</List>
 				</Drawer>
 				<Box
@@ -97,7 +105,6 @@ export default function Navbar() {
 					sx={{ flexGrow: 1, bgcolor: "background.default", p: 3 }}
 				>
 					<Toolbar />
-
 					<Outlet />
 				</Box>
 			</Box>
@@ -106,7 +113,7 @@ export default function Navbar() {
 
 	return (
 		<div className="text-center">
-			<PermamentDrawerLeft></PermamentDrawerLeft>
+			<PermanentDrawerLeft />
 		</div>
 	);
 }

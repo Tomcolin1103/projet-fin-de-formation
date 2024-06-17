@@ -81,25 +81,17 @@ const usersService = {
 		userId: number,
 		data: {
 			username?: string;
-			firstname?: string;
-			lastname?: string;
-			hashedPassword?: string;
-			familyId?: [number];
 		}
 	) => {
 		const id: number = +userId;
 		try {
-			const { username, firstname, lastname, hashedPassword, familyId } = data;
+			const { username } = data;
 			const updateUser = await prisma.users.update({
 				where: {
 					userId: id,
 				},
 				data: {
 					username: username,
-					firstname: firstname,
-					lastname: lastname,
-					password: hashedPassword,
-					familyId: familyId,
 				},
 			});
 			return updateUser;
@@ -120,6 +112,61 @@ const usersService = {
 		} catch (e) {
 			console.error(e);
 			throw e;
+		}
+	},
+	leaveFamily: async (userId: number, familyToLeave: number) => {
+		const id: number = +userId;
+		const familyToLeaveId: number = +familyToLeave;
+		try {
+			if (id) {
+				const user = await usersService.getUserById(id);
+				if (user) {
+					const oldFamilyList: number[] = user.familyId;
+					const newFamilyList: number[] = oldFamilyList.filter(
+						(familyId) => familyId !== familyToLeave
+					);
+					const updatedUser = await prisma.users.update({
+						where: {
+							userId: id,
+						},
+						data: {
+							familyId: newFamilyList,
+						},
+					});
+
+					return updatedUser;
+				}
+			}
+		} catch (e) {
+			console.error(e);
+			throw e;
+		}
+	},
+	joinFamily: async (userId: number, familyToJoin: number) => {
+		const id: number = +userId;
+		const familyToJoinId: number = +familyToJoin;
+		try {
+			if (id) {
+				const user = await usersService.getUserById(id);
+				if (user) {
+					const oldFamilyList: number[] = user.familyId;
+					oldFamilyList.push(familyToJoinId);
+					const newFamilyList: number[] = oldFamilyList;
+					const updatedUser = await prisma.users.update({
+						where: {
+							userId: id,
+						},
+						data: {
+							familyId: newFamilyList,
+						},
+					});
+
+					return updatedUser;
+				}
+			}
+		} catch (error) {
+			console.error(error);
+			throw error;
 		}
 	},
 };

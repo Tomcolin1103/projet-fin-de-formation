@@ -1,11 +1,13 @@
 import { useRecoilState } from "recoil";
 import { user } from "../api/user.api";
 import { userState } from "../atoms/atom";
-import { useEffect } from "react";
-import { FormControl, Input, InputLabel } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Alert, Button, FormControl, Input, InputLabel } from "@mui/material";
 
 export default function Profile() {
 	const [userProfile, setUserProfile] = useRecoilState(userState);
+	const [username, setUserName] = useState(userProfile.username);
+	const [isUpdated, setIsUpdated] = useState(false);
 
 	const getProfile = async (userId) => {
 		try {
@@ -16,6 +18,17 @@ export default function Profile() {
 		}
 	};
 
+	const handleUpdateUsername = async (e) => {
+		e.preventDefault();
+		const userId = localStorage.getItem("user");
+		try {
+			await user.updateUser(userId, username);
+			setIsUpdated(true);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
 	useEffect(() => {
 		const userId = localStorage.getItem("user");
 		if (userId && !userProfile.username) {
@@ -23,57 +36,28 @@ export default function Profile() {
 		}
 	}, []);
 
-	const handleChange = (e, field) => {
-		setUserProfile((prevProfile) => ({
-			...prevProfile,
-			[field]: e.target.value,
-		}));
+	const Congrat = () => {
+		return <Alert severity="success">Profile Updated</Alert>;
 	};
 
 	return (
 		<div>
-			<form action="">
+			<form onSubmit={handleUpdateUsername}>
 				<FormControl>
 					<InputLabel htmlFor="usernameLabel">Username</InputLabel>
 					<Input
 						id="usernameLabel"
 						required
-						value={userProfile.username || ""}
-						onChange={(e) => handleChange(e, "username")}
+						value={username}
+						onChange={(e) => setUserName(e.target.value)}
 						sx={{ m: 3 }}
 					/>
-				</FormControl>
-				<FormControl>
-					<InputLabel htmlFor="firstnameLabel">Firstname</InputLabel>
-					<Input
-						id="firstnameLabel"
-						required
-						value={userProfile?.firstname || ""}
-						onChange={(e) => handleChange(e, "firstname")}
-						sx={{ m: 3 }}
-					/>
-				</FormControl>
-				<FormControl>
-					<InputLabel htmlFor="lastnameLabel">Lastname</InputLabel>
-					<Input
-						id="lastnameLabel"
-						required
-						value={userProfile?.lastname || ""}
-						onChange={(e) => handleChange(e, "lastname")}
-						sx={{ m: 3 }}
-					/>
-				</FormControl>
-				<FormControl>
-					<InputLabel htmlFor="passwordLabel">Password</InputLabel>
-					<Input
-						id="passwordLabel"
-						required
-						value={userProfile?.password || ""}
-						onChange={(e) => handleChange(e, "password")}
-						sx={{ m: 3 }}
-					/>
+					<Button variant="contained" color="secondary" type="submit">
+						Change username
+					</Button>
 				</FormControl>
 			</form>
+			{isUpdated && <Congrat />}
 		</div>
 	);
 }

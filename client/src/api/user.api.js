@@ -17,7 +17,7 @@ export const user = {
 			});
 	},
 	login: (username, password) => {
-		axios
+		return axios
 			.post("http://localhost:3000/api/users/login", {
 				username: username,
 				password: password,
@@ -25,9 +25,23 @@ export const user = {
 			.then((res) => {
 				localStorage.setItem("token", res.data.token);
 				localStorage.setItem("user", res.data.user.user.userId);
-			})
-			.catch((e) => {
-				console.log(e);
+			});
+	},
+	updateUser: (userId, username) => {
+		axios
+			.put(
+				`http://localhost:3000/api/users/${userId}`,
+				{
+					username: username,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+					},
+				}
+			)
+			.catch((error) => {
+				console.error(error);
 			});
 	},
 	getById: (userId) => {
@@ -47,5 +61,44 @@ export const user = {
 	},
 	logout: () => {
 		localStorage.clear();
+	},
+	leaveFamily: (userId, familyToLeave) => {
+		return axios
+			.delete(`http://localhost:3000/api/users/${userId}/leaveFamily`, {
+				headers: {
+					Authorization: `Bearer ${localStorage.getItem("token")}`,
+				},
+				data: {
+					familyToLeave: familyToLeave,
+				},
+			})
+			.then((res) => {
+				return res.data;
+			})
+			.catch((error) => {
+				console.error(error);
+				throw error;
+			});
+	},
+	joinFamily: (userId, familyToJoin) => {
+		return axios
+			.post(
+				`http://localhost:3000/api/users/${userId}/joinFamily`,
+				{
+					familyToJoin: familyToJoin,
+				},
+				{
+					headers: {
+						Authorization: `Bearer ${localStorage.getItem("token")}`,
+					},
+				}
+			)
+			.then((res) => {
+				return res.data;
+			})
+			.catch((error) => {
+				console.error(error);
+				throw error;
+			});
 	},
 };

@@ -22,6 +22,16 @@ const familyController = {
 			res.sendStatus(500);
 		}
 	},
+	getFamilyById: async (req: Request, res: Response) => {
+		const familyId: number = +req.params.id;
+		try {
+			const family = await familyService.getFamilyById(familyId);
+			res.send({ family });
+		} catch (error) {
+			console.error(error);
+			res.sendStatus(500);
+		}
+	},
 	getUserFamilyByUserId: async (req: Request, res: Response) => {
 		try {
 			const userId: number = +req.params.id;
@@ -47,7 +57,6 @@ const familyController = {
 			res.sendStatus(500);
 		}
 	},
-	// TODO Leave Family
 	deleteFamily: async (req: Request, res: Response) => {
 		try {
 			const familyId: number = +req.params.id;

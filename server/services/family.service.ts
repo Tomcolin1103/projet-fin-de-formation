@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
-import { IFamily, IUser } from "../interfaces/users.interfaces";
+import { IFamily } from "../interfaces/users.interfaces";
 
 const familyService = {
 	createFamily: async (data: { familyName: string }) => {
@@ -24,6 +24,21 @@ const familyService = {
 		} catch (e) {
 			console.error(e);
 			throw e;
+		}
+	},
+	getFamilyById: async (familyId: number) => {
+		try {
+			if (familyId) {
+				const family = await prisma.family.findUnique({
+					where: {
+						familyId: familyId,
+					},
+				});
+				return family;
+			}
+		} catch (error) {
+			console.error(error);
+			throw error;
 		}
 	},
 	getUserFamilyByUserId: async (userId: number) => {
@@ -60,30 +75,6 @@ const familyService = {
 				},
 			});
 			return updateFamily;
-		} catch (e) {
-			console.error(e);
-			throw e;
-		}
-	},
-	leaveFamily: async (data: {
-		listFamilys: number[];
-		userId: number;
-		familyToLeave: number;
-	}) => {
-		try {
-			const { listFamilys, userId, familyToLeave } = data;
-			const newFamilyList = listFamilys.filter(
-				(familyId: number) => familyId !== familyToLeave
-			);
-			const usId: number = +userId;
-			const user = await prisma.users.update({
-				where: {
-					userId: usId,
-				},
-				data: {
-					familyId: newFamilyList,
-				},
-			});
 		} catch (e) {
 			console.error(e);
 			throw e;
